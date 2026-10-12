@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AdabKita — Belajar Adab, Mulai dari Kita</title>
+<meta name="description" content="Social project Pendidikan Agama Islam untuk membantu pelajar memahami dan mempraktikkan adab Islami sehari-hari.">
+<style>
+:root{
+  --sage:#7d9a78;
+  --sage-dark:#4f6b4b;
+  --sage-deep:#34492f;
+  --sage-light:#e4ecdf;
+  --cream:#faf6ea;
+  --cream-dark:#f0e9d2;
+  --white:#ffffff;
+  --text:#2b3327;
+  --muted:#5f6b5a;
+  --wrong:#b5523b;
+  --wrong-bg:#f8e6e0;
+  --radius:18px;
+  --shadow:0 6px 24px rgba(52,73,47,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+  background:var(--cream);
+  color:var(--text);
+  line-height:1.65;
+  font-size:16px;
+}
+a{color:inherit}
+.container{width:100%;max-width:1040px;margin:0 auto;padding:0 20px}
+section{padding:56px 0}
+h1,h2,h3{line-height:1.25;color:var(--sage-deep)}
+h2{font-size:1.7rem;margin-bottom:8px}
+.section-sub{color:var(--muted);max-width:620px;margin-bottom:28px}
+.eyebrow{
+  display:inline-block;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;
+  font-weight:700;color:var(--sage-dark);background:var(--sage-light);
+  padding:5px 12px;border-radius:999px;margin-bottom:14px;
+}
+
+/* Buttons */
+.btn{
+  display:inline-block;border:none;cursor:pointer;font:inherit;font-weight:600;
+  padding:13px 24px;border-radius:999px;text-decoration:none;
+  background:var(--sage-dark);color:var(--white);
+  transition:transform .15s,background .15s,box-shadow .15s;
+  min-height:48px;
+}
+.btn:hover{background:var(--sage-deep);transform:translateY(-1px);box-shadow:var(--shadow)}
+.btn:active{transform:translateY(0)}
+.btn.secondary{background:transparent;color:var(--sage-dark);border:2px solid var(--sage)}
+.btn.secondary:hover{background:var(--sage-light)}
+.btn:focus-visible,.option:focus-visible,.nav a:focus-visible{outline:3px solid #c9a94a;outline-offset:2px}
+
+/* Header */
+header.site{
+  position:sticky;top:0;z-index:50;background:rgba(250,246,234,.92);
+  backdrop-filter:blur(8px);border-bottom:1px solid var(--cream-dark);
+}
+.header-inner{display:flex;align-items:center;justify-content:space-between;padding:12px 0;gap:12px}
+.logo{font-weight:800;font-size:1.25rem;color:var(--sage-deep);text-decoration:none;letter-spacing:-.01em}
+.logo span{color:var(--sage)}
+.nav{display:flex;gap:4px}
+.nav a{
+  text-decoration:none;font-size:.92rem;font-weight:600;color:var(--sage-dark);
+  padding:8px 12px;border-radius:999px;
+}
+.nav a:hover{background:var(--sage-light)}
+
+/* Hero */
+.hero{padding:64px 0 48px;background:linear-gradient(180deg,var(--sage-light) 0%,var(--cream) 100%)}
+.hero h1{font-size:2.3rem;letter-spacing:-.02em;margin-bottom:14px}
+.hero h1 em{font-style:normal;color:var(--sage-dark)}
+.hero p.lead{font-size:1.1rem;color:var(--muted);max-width:620px;margin-bottom:26px}
+.hero-actions{display:flex;flex-wrap:wrap;gap:12px}
+.tagline{margin-top:34px;display:flex;flex-wrap:wrap;gap:10px}
+.chip{background:var(--white);border:1px solid var(--cream-dark);padding:7px 14px;border-radius:999px;font-size:.88rem;color:var(--sage-dark);font-weight:600}
+
+/* Purpose */
+.purpose-grid{display:grid;gap:16px;grid-template-columns:1fr}
+.purpose-card{background:var(--white);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow);border:1px solid var(--cream-dark)}
+.purpose-card .num{
+  width:38px;height:38px;border-radius:50%;background:var(--sage);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-weight:800;margin-bottom:12px;
+}
+.purpose-card h3{font-size:1.1rem;margin-bottom:6px}
+.purpose-card p{color:var(--muted);font-size:.97rem}
+
+/* Materi */
+#materi{background:var(--white)}
+.cards{display:grid;gap:18px;grid-template-columns:1fr}
+.card{
+  background:var(--cream);border-radius:var(--radius);padding:24px;
+  border:1px solid var(--cream-dark);display:flex;flex-direction:column;
+}
+.card .icon{font-size:2rem;margin-bottom:10px}
+.card h3{font-size:1.2rem;margin-bottom:8px}
+.card .summary{color:var(--muted);font-size:.97rem;margin-bottom:16px}
+.card .detail{display:none;margin-bottom:16px;border-top:1px dashed var(--sage);padding-top:14px}
+.card.open .detail{display:block}
+.detail h4{font-size:.85rem;text-transform:uppercase;letter-spacing:.06em;color:var(--sage-dark);margin:12px 0 4px}
+.detail h4:first-child{margin-top:0}
+.detail p,.detail li{font-size:.96rem}
+.detail ul{padding-left:20px}
+.detail li{margin-bottom:4px}
+.source{
+  margin-top:12px;font-size:.84rem;background:var(--sage-light);color:var(--sage-deep);
+  padding:10px 12px;border-radius:12px;
+}
+.card .btn{align-self:flex-start;margin-top:auto}
+
+/* Quiz */
+.quiz-box{
+  background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);
+  border:1px solid var(--cream-dark);padding:26px;max-width:720px;
+}
+.quiz-start p{color:var(--muted);margin-bottom:20px}
+.quiz-meta{display:flex;justify-content:space-between;font-size:.9rem;font-weight:600;color:var(--sage-dark);margin-bottom:10px}
+.progress{height:8px;background:var(--sage-light);border-radius:999px;overflow:hidden;margin-bottom:20px}
+.progress div{height:100%;width:0;background:var(--sage);transition:width .3s}
+.question{font-size:1.15rem;font-weight:700;color:var(--sage-deep);margin-bottom:16px}
+.options{display:grid;gap:10px}
+.option{
+  text-align:left;font:inherit;background:var(--cream);border:2px solid var(--cream-dark);
+  padding:14px 16px;border-radius:14px;cursor:pointer;color:var(--text);min-height:52px;
+  transition:border-color .15s,background .15s;
+}
+.option:hover:not(:disabled){border-color:var(--sage);background:var(--sage-light)}
+.option:disabled{cursor:default}
+.option.correct{background:var(--sage-light);border-color:var(--sage-dark);font-weight:600}
+.option.wrong{background:var(--wrong-bg);border-color:var(--wrong)}
+.feedback{margin-top:18px;padding:14px 16px;border-radius:14px;font-size:.96rem}
+.feedback.good{background:var(--sage-light);color:var(--sage-deep)}
+.feedback.bad{background:var(--wrong-bg);color:#6e2e1d}
+.feedback strong{display:block;margin-bottom:4px}
+.quiz-next{margin-top:18px}
+.result{text-align:center}
+.score-circle{
+  width:140px;height:140px;border-radius:50%;margin:0 auto 18px;
+  background:var(--sage-light);border:6px solid var(--sage);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+.score-circle b{font-size:2.4rem;color:var(--sage-deep);line-height:1}
+.score-circle small{color:var(--muted)}
+.result h3{margin-bottom:8px;font-size:1.3rem}
+.result p{color:var(--muted);margin-bottom:20px}
+.review{text-align:left;margin:0 0 22px;display:grid;gap:8px}
+.review div{background:var(--cream);border-radius:12px;padding:10px 14px;font-size:.92rem}
+.review .ok{border-left:5px solid var(--sage-dark)}
+.review .no{border-left:5px solid var(--wrong)}
+.hidden{display:none !important}
+
+/* Daily */
+#harian{background:var(--sage-light)}
+.daily-box{
+  background:var(--white);border-radius:var(--radius);padding:28px;
+  box-shadow:var(--shadow);max-width:720px;
+}
+.daily-label{font-size:.85rem;font-weight:700;color:var(--sage-dark);text-transform:uppercase;letter-spacing:.06em}
+.daily-text{font-size:1.25rem;font-weight:700;color:var(--sage-deep);margin:8px 0 6px}
+.daily-why{color:var(--muted);margin-bottom:18px}
+.daily-actions{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px}
+.daily-status{font-size:.95rem;color:var(--sage-dark);font-weight:600;min-height:1.4em}
+.pledge{margin-top:22px;padding-top:18px;border-top:1px dashed var(--sage);font-size:.95rem;color:var(--muted)}
+
+/* Footer */
+footer{background:var(--sage-deep);color:#e8efe4;padding:36px 0;text-align:center;font-size:.92rem}
+footer strong{color:#fff;font-size:1.1rem}
+footer p{margin-top:8px;max-width:640px;margin-left:auto;margin-right:auto;color:#cddac8}
+
+/* Tablet & desktop */
+@media (min-width:640px){
+  .purpose-grid{grid-template-columns:repeat(3,1fr)}
+  .cards{grid-template-columns:repeat(2,1fr)}
+  .hero h1{font-size:3rem}
+}
+/* Phone */
+@media (max-width:520px){
+  section{padding:44px 0}
+  .header-inner{flex-direction:column;align-items:flex-start;gap:6px}
+  .nav{width:100%;overflow-x:auto;padding-bottom:4px}
+  .nav a{white-space:nowrap;padding:8px 10px}
+  .quiz-box,.daily-box{padding:20px}
+  .btn{width:100%;text-align:center}
+  .card .btn{align-self:stretch}
+  .hero-actions .btn,.daily-actions .btn{width:100%}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none !important;scroll-behavior:auto !important}}
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="container header-inner">
+    <a href="#beranda" class="logo">Adab<span>Kita</span></a>
+    <nav class="nav" aria-label="Navigasi utama">
+      <a href="#tujuan">Tujuan</a>
+      <a href="#materi">Materi</a>
+      <a href="#kuis">Kuis</a>
+      <a href="#harian">Adab Harian</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<!-- BERANDA -->
+<section class="hero" id="beranda">
+  <div class="container">
+    <span class="eyebrow">Social Project Pendidikan Agama Islam</span>
+    <h1>AdabKita<br><em>Belajar Adab, Mulai dari Kita.</em></h1>
+    <p class="lead">Ilmu yang baik perlu dibarengi adab yang baik. AdabKita mengajak pelajar memahami adab Islami dan mempraktikkannya dalam hal-hal kecil sehari-hari: di rumah, di sekolah, dan di dunia maya.</p>
+    <div class="hero-actions">
+      <a href="#materi" class="btn">Mulai Belajar</a>
+      <a href="#kuis" class="btn secondary">Uji Pemahamanmu</a>
+    </div>
+    <div class="tagline">
+      <span class="chip">4 Materi Adab</span>
+      <span class="chip">Kuis 5 Soal</span>
+      <span class="chip">Tantangan Harian</span>
+    </div>
+  </div>
+</section>
+
+<!-- TUJUAN SOSIAL -->
+<section id="tujuan">
+  <div class="container">
+    <h2>Tujuan Sosial Kami</h2>
+    <p class="section-sub">Perubahan besar bisa dimulai dari kebiasaan kecil yang dilakukan bersama-sama oleh teman sebaya.</p>
+    <div class="purpose-grid">
+      <div class="purpose-card">
+        <div class="num">1</div>
+        <h3>Memahami</h3>
+        <p>Membantu pelajar mengenal adab Islami melalui penjelasan singkat, contoh nyata, dan hikmahnya.</p>
+      </div>
+      <div class="purpose-card">
+        <div class="num">2</div>
+        <h3>Mempraktikkan</h3>
+        <p>Mengajak setiap pelajar menerapkan satu adab baik setiap hari, mulai dari diri sendiri.</p>
+      </div>
+      <div class="purpose-card">
+        <div class="num">3</div>
+        <h3>Menularkan</h3>
+        <p>Menciptakan lingkungan sekolah dan pergaulan yang lebih santun, saling menghargai, dan bersih.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MATERI -->
+<section id="materi">
+  <div class="container">
+    <h2>Materi Adab</h2>
+    <p class="section-sub">Pilih satu materi, lalu tekan tombol untuk membaca penjelasan, contoh penerapan, dan hikmahnya.</p>
+    <div class="cards" id="cards"></div>
+  </div>
+</section>
+
+<!-- KUIS -->
+<section id="kuis">
+  <div class="container">
+    <h2>Kuis Adab</h2>
+    <p class="section-sub">Lima soal pilihan ganda. Setiap jawaban disertai pembahasan.</p>
+    <div class="quiz-box" id="quizBox" aria-live="polite">
+
+      <div id="quizStart" class="quiz-start">
+        <p>Siap menguji pemahamanmu? Kamu akan menjawab 5 soal tentang adab kepada orang tua dan guru, teman, media sosial, dan kebersihan.</p>
+        <button class="btn" id="startBtn" type="button">Mulai Kuis</button>
+      </div>
+
+      <div id="quizPlay" class="hidden">
+        <div class="quiz-meta"><span id="qCounter">Soal 1 dari 5</span><span id="qScore">Skor: 0</span></div>
+        <div class="progress"><div id="qBar"></div></div>
+        <p class="question" id="qText"></p>
+        <div class="options" id="qOptions"></div>
+        <div id="qFeedback" class="feedback hidden"></div>
+        <button class="btn quiz-next hidden" id="nextBtn" type="button">Lanjut</button>
+      </div>
+
+      <div id="quizResult" class="result hidden">
+        <div class="score-circle"><b id="finalScore">0</b><small>dari 5</small></div>
+        <h3 id="resultTitle"></h3>
+        <p id="resultMsg"></p>
+        <div class="review" id="reviewList"></div>
+        <button class="btn" id="restartBtn" type="button">Ulangi Kuis</button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ADAB HARIAN -->
+<section id="harian">
+  <div class="container">
+    <h2>Satu Hari, Satu Adab</h2>
+    <p class="section-sub">Kita tidak perlu menunggu sempurna. Cukup pilih satu adab baik hari ini dan lakukan dengan sungguh-sungguh.</p>
+    <div class="daily-box">
+      <div class="daily-label">Tantangan Adab Hari Ini</div>
+      <p class="daily-text" id="dailyText"></p>
+      <p class="daily-why" id="dailyWhy"></p>
+      <div class="daily-actions">
+        <button class="btn" id="doneBtn" type="button">Sudah Aku Lakukan</button>
+        <button class="btn secondary" id="otherBtn" type="button">Adab Lainnya</button>
+      </div>
+      <p class="daily-status" id="dailyStatus"></p>
+      <p class="pledge">Ajak satu temanmu untuk ikut mencoba. Kebaikan terasa lebih ringan ketika dilakukan bersama.</p>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="container">
+    <strong>AdabKita</strong>
+    <p>Belajar Adab, Mulai dari Kita. Materi ini bersifat pengantar untuk pembelajaran Pendidikan Agama Islam; untuk pendalaman, tanyakan kepada guru PAI atau ustaz/ustazah yang terpercaya.</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---------- DATA MATERI ---------- */
+  var materi = [
+    {
+      icon: "🤲",
+      title: "Adab kepada Orang Tua dan Guru",
+      summary: "Menghormati orang tua dan guru adalah pintu keberkahan hidup dan ilmu.",
+      penjelasan: "Islam mengajarkan kita berbakti kepada orang tua dan memuliakan guru. Bentuknya antara lain berbicara dengan lembut, mendengarkan nasihat, tidak membantah dengan kasar, dan membantu mereka sesuai kemampuan.",
+      contoh: [
+        "Menjawab panggilan orang tua dengan sopan dan segera membantu.",
+        "Mengucap salam dan bersalaman saat bertemu guru.",
+        "Mendengarkan penjelasan guru tanpa memotong pembicaraan.",
+        "Meminta maaf dan berterima kasih dengan tulus."
+      ],
+      hikmah: "Hati orang tua menjadi tenang, ilmu dari guru lebih mudah dipahami, dan hubungan di rumah maupun di sekolah menjadi hangat.",
+      sumber: "Rujukan: QS. Al-Isra' ayat 23 (perintah berbuat baik kepada orang tua dan larangan berkata kasar kepada mereka, bahkan sekadar mengucapkan \"ah\"). Silakan baca teks dan terjemahan resminya pada mushaf atau terjemahan Kementerian Agama RI."
+    },
+    {
+      icon: "🤝",
+      title: "Adab kepada Teman",
+      summary: "Pertemanan yang sehat dibangun dengan saling menghargai dan menjaga lisan.",
+      penjelasan: "Adab kepada teman meliputi menyapa dengan ramah, tidak mengolok-olok, tidak menyebar aib, menepati janji, dan menolong ketika teman kesulitan.",
+      contoh: [
+        "Tidak memberi julukan yang menyakitkan kepada teman.",
+        "Mengajak teman yang sendirian untuk bergabung.",
+        "Meminta maaf cepat jika berbuat salah.",
+        "Menjaga rahasia yang dipercayakan kepada kita."
+      ],
+      hikmah: "Lingkungan kelas menjadi aman dan nyaman, tidak ada yang merasa dikucilkan, dan persaudaraan semakin kuat.",
+      sumber: "Rujukan: QS. Al-Hujurat ayat 11 (larangan saling mengolok-olok dan memanggil dengan gelar yang buruk). Silakan baca teks dan terjemahan resminya pada mushaf atau terjemahan Kementerian Agama RI."
+    },
+    {
+      icon: "📱",
+      title: "Adab Bermedia Sosial",
+      summary: "Jari kita adalah lisan kedua: tulisan dan unggahan juga akan dipertanggungjawabkan.",
+      penjelasan: "Di dunia maya, adab tetap berlaku. Pikirkan dulu sebelum menulis, periksa kebenaran kabar sebelum membagikannya, jaga privasi orang lain, dan hindari komentar yang menyakiti.",
+      contoh: [
+        "Mengecek sumber berita sebelum membagikannya ke grup.",
+        "Tidak mengunggah foto teman tanpa izin.",
+        "Menulis komentar dengan bahasa yang santun.",
+        "Memilih diam jika komentar hanya akan memicu pertengkaran."
+      ],
+      hikmah: "Kita ikut menjaga ruang digital tetap sehat, terhindar dari hoaks, dan tidak menyakiti perasaan orang lain.",
+      sumber: "Rujukan: QS. Al-Hujurat ayat 6 (perintah memeriksa kebenaran berita/tabayyun) dan hadis riwayat Al-Bukhari no. 6018 serta Muslim no. 47 (anjuran berkata baik atau diam bagi orang yang beriman kepada Allah dan hari akhir). Di sini hanya makna umumnya yang dirangkum; periksa teks lengkapnya pada kitab hadis atau terjemahan yang terpercaya."
+    },
+    {
+      icon: "🌿",
+      title: "Adab Menjaga Kebersihan",
+      summary: "Bersih adalah bagian dari ajaran Islam dan cerminan rasa syukur.",
+      penjelasan: "Menjaga kebersihan mencakup kebersihan badan, pakaian, tempat ibadah, kelas, dan lingkungan. Membuang sampah pada tempatnya dan merapikan barang adalah bentuk tanggung jawab kita bersama.",
+      contoh: [
+        "Membuang sampah pada tempatnya, termasuk bungkus jajan.",
+        "Ikut piket kelas dengan sungguh-sungguh.",
+        "Merapikan sandal dan perlengkapan salat di masjid atau musala.",
+        "Mencuci tangan sebelum makan dan menjaga kebersihan diri."
+      ],
+      hikmah: "Badan lebih sehat, belajar lebih nyaman, dan lingkungan sekolah menjadi indah serta menyenangkan bagi semua orang.",
+      sumber: "Rujukan: hadis riwayat Muslim no. 223 yang menyebut bersuci/kebersihan sebagai separuh dari iman (makna umum). Periksa teks lengkapnya pada kitab hadis atau terjemahan yang terpercaya."
+    }
+  ];
+
+  var cardsEl = document.getElementById("cards");
+  materi.forEach(function (m, i) {
+    var card = document.createElement("article");
+    card.className = "card";
+    var lis = m.contoh.map(function (c) { return "<li>" + c + "</li>"; }).join("");
+    card.innerHTML =
+      '<div class="icon" aria-hidden="true">' + m.icon + '</div>' +
+      '<h3>' + m.title + '</h3>' +
+      '<p class="summary">' + m.summary + '</p>' +
+      '<div class="detail" id="detail' + i + '">' +
+        '<h4>Penjelasan Singkat</h4><p>' + m.penjelasan + '</p>' +
+        '<h4>Contoh Penerapan</h4><ul>' + lis + '</ul>' +
+        '<h4>Hikmah</h4><p>' + m.hikmah + '</p>' +
+        '<p class="source">' + m.sumber + '</p>' +
+      '</div>' +
+      '<button class="btn secondary" type="button" aria-expanded="false" aria-controls="detail' + i + '">Baca Materi</button>';
+    var btn = card.querySelector("button");
+    btn.addEventListener("click", function () {
+      var open = card.classList.toggle("open");
+      btn.textContent = open ? "Tutup Materi" : "Baca Materi";
+      btn.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+    cardsEl.appendChild(card);
+  });
+
+  /* ---------- KUIS ---------- */
+  var soal = [
+    {
+      q: "Ketika orang tua memanggilmu saat kamu sedang asyik bermain gawai, sikap yang paling sesuai adab adalah...",
+      o: [
+        "Pura-pura tidak mendengar sampai dipanggil lagi",
+        "Menjawab dengan sopan dan segera menghampiri",
+        "Menjawab dengan nada kesal agar tidak diganggu",
+        "Menyuruh adik yang menghampiri"
+      ],
+      a: 1,
+      e: "Menjawab dengan sopan dan segera menghampiri adalah wujud bakti kepada orang tua. Islam melarang berkata kasar kepada orang tua (lihat QS. Al-Isra' ayat 23)."
+    },
+    {
+      q: "Seorang teman sekelasmu sering diejek dengan julukan yang membuatnya sedih. Apa yang sebaiknya kamu lakukan?",
+      o: [
+        "Ikut tertawa agar tidak dianggap sok baik",
+        "Diam saja karena bukan urusanmu",
+        "Tidak ikut mengejek, menegur dengan baik, dan menemani temanmu",
+        "Merekam kejadian itu lalu membagikannya"
+      ],
+      a: 2,
+      e: "Islam melarang saling mengolok-olok dan memanggil dengan gelar yang buruk (QS. Al-Hujurat ayat 11). Menegur dengan baik dan menemani teman yang terluka adalah bentuk persaudaraan."
+    },
+    {
+      q: "Kamu menerima pesan berantai yang berisi kabar mengejutkan tanpa sumber jelas. Langkah terbaik adalah...",
+      o: [
+        "Langsung membagikannya ke semua grup agar yang lain waspada",
+        "Memeriksa kebenarannya dari sumber terpercaya sebelum membagikan",
+        "Menambah-nambahkan agar lebih meyakinkan",
+        "Menyebarkannya dengan alasan hanya iseng"
+      ],
+      a: 1,
+      e: "Memeriksa kebenaran berita (tabayyun) diperintahkan dalam QS. Al-Hujurat ayat 6. Membagikan kabar tanpa dicek dapat menyebarkan hoaks dan merugikan orang lain."
+    },
+    {
+      q: "Menurut anjuran Nabi Muhammad ﷺ dalam hadis riwayat Al-Bukhari dan Muslim, orang yang beriman kepada Allah dan hari akhir hendaknya...",
+      o: [
+        "Berkata baik atau diam",
+        "Banyak berdebat agar menang",
+        "Selalu menceritakan kesalahan orang lain",
+        "Berkomentar apa saja di media sosial"
+      ],
+      a: 0,
+      e: "Hadis riwayat Al-Bukhari no. 6018 dan Muslim no. 47 menganjurkan agar kita berkata baik atau diam. Prinsip ini berlaku juga untuk tulisan dan komentar di media sosial."
+    },
+    {
+      q: "Setelah makan di kantin, bungkus jajananmu masih ada di tangan dan tempat sampah agak jauh. Sikap yang benar adalah...",
+      o: [
+        "Meletakkannya di bawah meja karena nanti ada petugas kebersihan",
+        "Membuangnya ke halaman agar cepat",
+        "Menyimpannya dan membuangnya di tempat sampah",
+        "Menitipkannya ke teman tanpa bilang apa-apa"
+      ],
+      a: 2,
+      e: "Menjaga kebersihan adalah bagian dari ajaran Islam, dan hadis riwayat Muslim no. 223 menyebut bersuci/kebersihan sebagai separuh dari iman (makna umum). Membuang sampah pada tempatnya adalah tanggung jawab pribadi kita."
+    }
+  ];
+
+  var el = {
+    start: document.getElementById("quizStart"),
+    play: document.getElementById("quizPlay"),
+    result: document.getElementById("quizResult"),
+    counter: document.getElementById("qCounter"),
+    score: document.getElementById("qScore"),
+    bar: document.getElementById("qBar"),
+    text: document.getElementById("qText"),
+    options: document.getElementById("qOptions"),
+    feedback: document.getElementById("qFeedback"),
+    next: document.getElementById("nextBtn"),
+    finalScore: document.getElementById("finalScore"),
+    title: document.getElementById("resultTitle"),
+    msg: document.getElementById("resultMsg"),
+    review: document.getElementById("reviewList")
+  };
+  var idx = 0, skor = 0, answered = false, riwayat = [];
+
+  function show(which) {
+    el.start.classList.toggle("hidden", which !== "start");
+    el.play.classList.toggle("hidden", which !== "play");
+    el.result.classList.toggle("hidden", which !== "result");
+  }
+
+  function startQuiz() {
+    idx = 0; skor = 0; riwayat = [];
+    show("play");
+    renderQuestion();
+    document.getElementById("quizBox").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function renderQuestion() {
+    var s = soal[idx];
+    answered = false;
+    el.counter.textContent = "Soal " + (idx + 1) + " dari " + soal.length;
+    el.score.textContent = "Skor: " + skor;
+    el.bar.style.width = (idx / soal.length * 100) + "%";
+    el.text.textContent = s.q;
+    el.options.innerHTML = "";
+    el.feedback.className = "feedback hidden";
+    el.next.classList.add("hidden");
+    s.o.forEach(function (opt, i) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "option";
+      b.textContent = String.fromCharCode(65 + i) + ". " + opt;
+      b.addEventListener("click", function () { choose(i); });
+      el.options.appendChild(b);
+    });
+  }
+
+  function choose(i) {
+    if (answered) return;
+    answered = true;
+    var s = soal[idx];
+    var benar = i === s.a;
+    if (benar) skor++;
+    riwayat.push(benar);
+    var btns = el.options.querySelectorAll(".option");
+    btns.forEach(function (b, n) {
+      b.disabled = true;
+      if (n === s.a) b.classList.add("correct");
+      if (n === i && !benar) b.classList.add("wrong");
+    });
+    el.score.textContent = "Skor: " + skor;
+    el.feedback.className = "feedback " + (benar ? "good" : "bad");
+    el.feedback.innerHTML = "<strong>" + (benar ? "Benar! 🎉" : "Belum tepat") + "</strong>" + s.e;
+    el.next.textContent = idx === soal.length - 1 ? "Lihat Hasil" : "Lanjut";
+    el.next.classList.remove("hidden");
+    el.bar.style.width = ((idx + 1) / soal.length * 100) + "%";
+  }
+
+  function nextQuestion() {
+    if (idx < soal.length - 1) {
+      idx++;
+      renderQuestion();
+    } else {
+      showResult();
+    }
+  }
+
+  function showResult() {
+    show("result");
+    el.finalScore.textContent = skor;
+    var t, m;
+    if (skor === 5) { t = "Masyaallah, sempurna!"; m = "Pemahamanmu sudah sangat baik. Sekarang saatnya mempraktikkannya dan mengajak teman lain."; }
+    else if (skor >= 3) { t = "Bagus sekali!"; m = "Kamu sudah memahami banyak hal. Baca ulang materi yang belum tepat, lalu coba lagi."; }
+    else { t = "Terus semangat!"; m = "Tidak apa-apa. Baca kembali materi di atas, lalu ulangi kuis. Belajar adab adalah proses seumur hidup."; }
+    el.title.textContent = t;
+    el.msg.textContent = m;
+    el.review.innerHTML = "";
+    riwayat.forEach(function (ok, n) {
+      var d = document.createElement("div");
+      d.className = ok ? "ok" : "no";
+      d.textContent = "Soal " + (n + 1) + ": " + (ok ? "Benar" : "Perlu dipelajari lagi");
+      el.review.appendChild(d);
+    });
+  }
+
+  document.getElementById("startBtn").addEventListener("click", startQuiz);
+  document.getElementById("restartBtn").addEventListener("click", startQuiz);
+  el.next.addEventListener("click", nextQuestion);
+
+  /* ---------- ADAB HARIAN ---------- */
+  var adabHarian = [
+    ["Ucapkan salam dan senyum kepada orang pertama yang kamu temui hari ini.", "Menyapa dengan ramah menumbuhkan rasa saling menghargai."],
+    ["Katakan terima kasih kepada orang tuamu atas satu hal yang mereka lakukan.", "Rasa syukur kepada orang tua adalah bagian dari bakti."],
+    ["Jawab panggilan orang tua atau guru dengan sopan dan segera.", "Kesopanan kecil mencerminkan hati yang menghormati."],
+    ["Dengarkan penjelasan guru tanpa memotong pembicaraan.", "Mendengarkan dengan baik membuat ilmu lebih mudah masuk."],
+    ["Bantu satu pekerjaan rumah tanpa diminta.", "Membantu keluarga membuat rumah lebih hangat."],
+    ["Ajak seorang teman yang sendirian untuk bergabung.", "Tak ada teman yang boleh merasa dikucilkan."],
+    ["Panggil temanmu dengan nama baiknya, tanpa julukan yang menyakitkan.", "Menjaga perasaan teman adalah bagian dari adab."],
+    ["Minta maaf lebih dulu jika kamu merasa pernah menyakiti seseorang.", "Meminta maaf melembutkan hati dan memperbaiki hubungan."],
+    ["Puji satu kebaikan temanmu dengan tulus.", "Kata-kata baik menguatkan persahabatan."],
+    ["Periksa dulu kebenaran satu kabar sebelum membagikannya.", "Kamu ikut menghentikan penyebaran hoaks."],
+    ["Tulis komentar yang santun di media sosial, atau pilih diam.", "Berkata baik atau diam menjaga diri dan orang lain."],
+    ["Tanyakan izin sebelum mengunggah foto atau cerita tentang orang lain.", "Menghormati privasi adalah bagian dari adab digital."],
+    ["Buang sampahmu pada tempatnya, dan satu sampah lain yang kamu lihat.", "Lingkungan bersih membuat semua orang nyaman."],
+    ["Rapikan meja belajar dan tempat tidurmu.", "Tempat yang rapi membantu pikiran lebih tenang."],
+    ["Rapikan sandal atau sepatu di depan masjid, musala, atau rumah.", "Kebiasaan kecil yang menunjukkan kepedulian pada orang lain."]
+  ];
+
+  var dText = document.getElementById("dailyText");
+  var dWhy = document.getElementById("dailyWhy");
+  var dStatus = document.getElementById("dailyStatus");
+  var doneBtn = document.getElementById("doneBtn");
+  var current;
+
+  function todayKey() {
+    var d = new Date();
+    return d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+  }
+  function dayIndex() {
+    var d = new Date();
+    var start = new Date(d.getFullYear(), 0, 0);
+    return Math.floor((d - start) / 86400000);
+  }
+  function storeGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function storeSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+
+  function renderDaily() {
+    dText.textContent = adabHarian[current][0];
+    dWhy.textContent = adabHarian[current][1];
+    var total = parseInt(storeGet("adabkita_total") || "0", 10);
+    var doneToday = storeGet("adabkita_done") === todayKey();
+    doneBtn.textContent = doneToday ? "Sudah Dicatat ✓" : "Sudah Aku Lakukan";
+    doneBtn.disabled = doneToday;
+    doneBtn.style.opacity = doneToday ? ".7" : "1";
+    if (doneToday) dStatus.textContent = "Alhamdulillah! Total adab yang sudah kamu praktikkan di perangkat ini: " + total + " kali.";
+    else if (total > 0) dStatus.textContent = "Kamu sudah mempraktikkan " + total + " adab. Yuk lanjutkan hari ini.";
+    else dStatus.textContent = "";
+  }
+
+  doneBtn.addEventListener("click", function () {
+    if (storeGet("adabkita_done") === todayKey()) return;
+    var total = parseInt(storeGet("adabkita_total") || "0", 10) + 1;
+    storeSet("adabkita_total", String(total));
+    storeSet("adabkita_done", todayKey());
+    renderDaily();
+    dStatus.textContent = "Alhamdulillah! Satu adab baik hari ini sudah kamu lakukan. Total: " + total + " kali.";
+  });
+
+  document.getElementById("otherBtn").addEventListener("click", function () {
+    current = (current + 1) % adabHarian.length;
+    renderDaily();
+  });
+
+  current = dayIndex() % adabHarian.length;
+  renderDaily();
+})();
+</script>
+</body>
+</html>
